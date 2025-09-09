@@ -20,7 +20,20 @@ public class CompanyController {
     }
 
     @GetMapping
-    public List<Company> getAllCompanies(){
+    public List<Company> getAllCompanies(@RequestParam(required = false, value = "page") Integer page,
+                                         @RequestParam (required = false, value = "size") Integer size){
+        if(page == null && size == null){
+            page = 0;
+            size = 0;
+        }
+        if(page != 0 && size != 0){
+            int start = (page - 1) * size;
+            int end = Math.min(start + size, companies.size());
+            if (start >= companies.size() || start < 0) {
+                return new ArrayList<>();
+            }
+            return companies.subList(start, end);
+        }
         return companies;
     }
 
@@ -31,5 +44,6 @@ public class CompanyController {
 
     public void clear(){
         companies.clear();
+        id = 0;
     }
 }

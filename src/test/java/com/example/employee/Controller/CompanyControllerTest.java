@@ -57,5 +57,22 @@ public class CompanyControllerTest {
                 .andExpect(jsonPath("$.name").value("alibaba"));
     }
 
+    @Test
+    void should_show_by_page() throws Exception {
+        Company company = new Company(null,"alibaba");
+        Company company1 = new Company(null ,"tencent");
+        Company company2 = new Company(null ,"baidu");
+        Company company3 = new Company(null ,"jd");
+        Company company4 = new Company(null ,"meituan");
+        companyController.createCompany(company);
+        companyController.createCompany(company1);
+        companyController.createCompany(company2);
+        companyController.createCompany(company3);
+        companyController.createCompany(company4);
+        MockHttpServletRequestBuilder request = get("/companies?page=1&size=2")
+                .contentType(MediaType.APPLICATION_JSON);
 
+        mockMvc.perform(request).andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
 }
