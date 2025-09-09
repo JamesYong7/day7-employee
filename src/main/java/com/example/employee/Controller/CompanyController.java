@@ -42,6 +42,19 @@ public class CompanyController {
         return companies.stream().filter(company -> company.id() == id).findFirst().orElse(null);
     }
 
+    @PutMapping("{id}")
+    public Company changeCompanyName(@PathVariable int id ,@RequestBody Company companyRequest) {
+        for (Company company : companies) {
+            if(company.id().equals(id)){
+                Company newCompany = new Company(id, companyRequest.name());
+                companies.remove(company);
+                companies.add(newCompany);
+                return newCompany;
+            }
+        }
+        return null;
+    }
+
     public void clear(){
         companies.clear();
         id = 0;

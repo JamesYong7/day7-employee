@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,17 +29,20 @@ public class CompanyControllerTest {
     }
 
     @Test
-    void should_return_all_companies_when_list_by_male() throws Exception {
+    void should_return_all_companies_when_list() throws Exception {
         Company company = new Company(null,"alibaba");
-        Company company1 = new Company(null ,"tencent");
         companyController.createCompany(company);
-        companyController.createCompany(company1);
+        String requestBody = """
+                {
+                    "name": "alibaba"
+                    }""";
         MockHttpServletRequestBuilder request = get("/companies")
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
 
         mockMvc.perform(request).andExpect(status ().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].id").value(1));
 
     }
@@ -74,5 +78,22 @@ public class CompanyControllerTest {
 
         mockMvc.perform(request).andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2));
+    }
+
+    @Test
+    void should_update_name_when_put_company_with_id_exist() throws Exception {
+        Company company = new Company(null,"alibaba");
+        companyController.createCompany(company);
+        String requestBody = """
+                {
+                    "name": "alibaba"
+                    }""";
+        MockHttpServletRequestBuilder request = put("/companies/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody);
+
+        mockMvc.perform(request).andExpect(status ().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.name").value("alibaba"));
     }
 }
