@@ -38,16 +38,30 @@ public class EmployeeController {
 
     @GetMapping
     public List<Employee> getMaleEmployees(@RequestParam (required = false) String gender) {
-        return employees.stream()
-                .filter(employee -> Objects.equals(employee.gender().toLowerCase(), gender.toLowerCase()))
-                .toList();
-
-    }
-
-    @GetMapping("/listAll")
-    public List<Employee> getAllEmployees() {
+        if (gender != null) {
+            return employees.stream()
+                    .filter(employee -> Objects.equals(employee.gender().toLowerCase(), gender.toLowerCase()))
+                    .toList();
+        }
         return employees;
     }
+
+    @PutMapping("/changeSalaryAndAge")
+    public Employee changeEmployeeSalary(@RequestBody Employee employeeRequest) {
+        String name = employeeRequest.name();
+        for (Employee employee : employees) {
+            if (employee.name().equals(name)) {
+                int id = employee.id();
+                Employee newEmployee = new Employee(id, employeeRequest.name(), employeeRequest.gender(), employeeRequest.age(), employeeRequest.salary());
+                employees.remove(employee);
+                employees.add(newEmployee);
+                return newEmployee;
+            }
+        }
+        return null;
+    }
+
+
 
     public void clear(){
         employees.clear();
