@@ -1,5 +1,6 @@
 package com.example.employee.Controller;
 
+import com.example.employee.Entity.Employee;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,6 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private EmployeeController employeeController;
+
     @Test
      void should_return_new_employee_when_post() throws Exception {
         //given
@@ -40,4 +44,18 @@ public class EmployeeControllerTest {
 
     }
 
+    @Test
+    void should_return_employees_when_get_employee_with_id_exist() throws Exception {
+        Employee employee = new Employee(1,"John Doe","male",30,5000);
+        Employee employee1 = employeeController.createEmployee(employee);
+        MockHttpServletRequestBuilder request = get("/employees/" + employee1.id())
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(request).andExpect(status ().isOk())
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.id").value(employee1.id()))
+                .andExpect(jsonPath("$.name").value("John Doe"))
+                .andExpect(jsonPath("$.age").value(30))
+                .andExpect(jsonPath("$.gender").value("male"))
+                .andExpect(jsonPath("$.salary").value(5000));
+    }
 }
