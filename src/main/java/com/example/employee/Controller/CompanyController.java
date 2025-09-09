@@ -22,10 +22,8 @@ public class CompanyController {
     @GetMapping
     public List<Company> getAllCompanies(@RequestParam(required = false, value = "page") Integer page,
                                          @RequestParam (required = false, value = "size") Integer size){
-        if(page == null && size == null){
-            page = 0;
-            size = 0;
-        }
+        page = (page == null) ? 0 : page;
+        size = (size == null) ? 0 : size;
         if(page != 0 && size != 0){
             int start = (page - 1) * size;
             int end = Math.min(start + size, companies.size());

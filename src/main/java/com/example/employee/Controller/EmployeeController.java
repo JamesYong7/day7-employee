@@ -33,10 +33,8 @@ public class EmployeeController {
     @GetMapping
     public List<Employee> getMaleEmployees(@RequestParam (required = false, value = "gender") String gender,
                                            @RequestParam(required = false, value = "page") Integer page, @RequestParam (required = false, value = "size") Integer size) {
-        if(page == null && size == null){
-            page = 0;
-            size = 0;
-        }
+        page = (page == null) ? 0 : page;
+        size = (size == null) ? 0 : size;
         if (gender != null ) {
             return employees.stream()
                     .filter(employee -> employee.gender().trim().equalsIgnoreCase(gender.trim()))
