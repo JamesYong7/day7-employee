@@ -58,4 +58,24 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.gender").value("male"))
                 .andExpect(jsonPath("$.salary").value(5000));
     }
+
+    @Test
+    void should_return_males_when_list_by_male() throws Exception {
+        Employee employee1 = new Employee(null, "John Doe", "male", 30, 5000);
+        employeeController.createEmployee(new Employee(1,"John Doe","male",30,5000));
+        employeeController.createEmployee(new Employee(2,"Alice","female",30,5000));
+        MockHttpServletRequestBuilder request = get("/employees?gender=male")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status ().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id").exists())
+                .andExpect(jsonPath("$[0].id").value(1))
+                .andExpect(jsonPath("$[0].name").value("John Doe"))
+                .andExpect(jsonPath("$[0].age").value(30))
+                .andExpect(jsonPath("$[0].gender").value("male"))
+                .andExpect(jsonPath("$[0].salary").value(5000));
+
+
+    }
 }
