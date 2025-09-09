@@ -24,6 +24,11 @@ public class CompanyController {
         return companies;
     }
 
+    @GetMapping("{id}")
+    public Company getCompanyById(@PathVariable int id){
+        return companies.stream().filter(company -> company.id() == id).findFirst().orElse(null);
+    }
+
     public void clear(){
         companies.clear();
     }
