@@ -68,9 +68,6 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable int id) {
         employees.removeIf(employee -> employee.id().equals(id));
-//        if (!removed) {
-//            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Employee not found");
-//        }
     }
 
     public void clear(){
