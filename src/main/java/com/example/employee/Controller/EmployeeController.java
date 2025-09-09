@@ -27,13 +27,7 @@ public class EmployeeController {
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public Employee getEmployeeById(@PathVariable int id) {
-        for (Employee employee : employees) {
-            if (employee.id().equals(id)) {
-                return employee;
-            }
-        }
-        return null;
-//        return employees.stream().filter(employee -> employee.id() == id).findFirst().orElse(null);
+        return employees.stream().filter(employee -> employee.id() == id).findFirst().orElse(null);
     }
 
     @GetMapping
@@ -61,7 +55,6 @@ public class EmployeeController {
 
     @PutMapping("{id}")
     public Employee changeEmployeeSalary(@PathVariable int id ,@RequestBody Employee employeeRequest) {
-        String name = employeeRequest.name();
         for (Employee employee : employees) {
             if(employee.id().equals(id)){
                 Employee newEmployee = new Employee(id, employeeRequest.name(), employeeRequest.gender(), employeeRequest.age(), employeeRequest.salary());
