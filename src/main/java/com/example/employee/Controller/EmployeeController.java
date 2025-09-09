@@ -44,6 +44,11 @@ public class EmployeeController {
 
     }
 
+    @GetMapping("/listAll")
+    public List<Employee> getAllEmployees() {
+        return employees;
+    }
+
     public void clear(){
         employees.clear();
         id = 0;
