@@ -3,11 +3,10 @@ package com.example.employee.Controller;
 import com.example.employee.Entity.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 
 @RestController
 @RequestMapping("employees")

@@ -52,7 +52,7 @@ public class EmployeeControllerTest {
 
     @Test
     void should_return_employees_when_get_employee_with_id_exist() throws Exception {
-        Employee employee = new Employee(1,"John Doe","male",30,5000);
+        Employee employee = new Employee(null,"John Doe","male",30,5000);
         Employee employee1 = employeeController.createEmployee(employee);
         MockHttpServletRequestBuilder request = get("/employees/" + employee1.id())
                 .contentType(MediaType.APPLICATION_JSON);
@@ -67,9 +67,8 @@ public class EmployeeControllerTest {
 
     @Test
     void should_return_males_when_list_by_male() throws Exception {
-        Employee employee1 = new Employee(null, "John Doe", "male", 30, 5000);
-        employeeController.createEmployee(new Employee(1,"John Doe","male",30,5000));
-        employeeController.createEmployee(new Employee(2,"Alice","female",30,5000));
+        employeeController.createEmployee(new Employee(null,"John Doe","male",30,5000));
+        employeeController.createEmployee(new Employee(null,"Alice","female",30,5000));
         MockHttpServletRequestBuilder request = get("/employees?gender=male")
                 .contentType(MediaType.APPLICATION_JSON);
 
@@ -85,9 +84,9 @@ public class EmployeeControllerTest {
 
     @Test
     void should_return_all_employees_when_list() throws Exception {
-        employeeController.createEmployee(new Employee(1,"John Doe","male",30,5000));
-        employeeController.createEmployee(new Employee(2,"Alice","female",30,5000));
-        employeeController.createEmployee(new Employee(3,"Ben","male",30,5000));
+        employeeController.createEmployee(new Employee(null,"John Doe","male",30,5000));
+        employeeController.createEmployee(new Employee(null,"Alice","female",30,5000));
+        employeeController.createEmployee(new Employee(null,"Ben","male",30,5000));
 
         MockHttpServletRequestBuilder request = get("/employees")
                 .contentType(MediaType.APPLICATION_JSON);
@@ -100,9 +99,9 @@ public class EmployeeControllerTest {
     @Test
     void should_update_salary_when_employee_exists() throws Exception {
         //given
-        employeeController.createEmployee(new Employee(1,"John Doe","male",30,5000));
-        employeeController.createEmployee(new Employee(2,"Alice","female",30,5000));
-        employeeController.createEmployee(new Employee(3,"Ben","male",30,5000));
+        employeeController.createEmployee(new Employee(null,"John Doe","male",30,5000));
+        employeeController.createEmployee(new Employee(null,"Alice","female",30,5000));
+        employeeController.createEmployee(new Employee(null,"Ben","male",30,5000));
         String requestBody = """
                 {
                     "name": "John Doe",
@@ -134,11 +133,11 @@ public class EmployeeControllerTest {
 
     @Test
     void should_show_by_page() throws Exception {
-        employeeController.createEmployee(new Employee(1, "John Doe", "male", 30, 5000));
-        employeeController.createEmployee(new Employee(2, "Alice", "female", 30, 5000));
-        employeeController.createEmployee(new Employee(3, "Ben", "male", 30, 5000));
-        employeeController.createEmployee(new Employee(4, "C", "male", 30, 5000));
-        employeeController.createEmployee(new Employee(5, "D", "male", 30, 5000));
+        employeeController.createEmployee(new Employee(null, "John Doe", "male", 30, 5000));
+        employeeController.createEmployee(new Employee(null, "Alice", "female", 30, 5000));
+        employeeController.createEmployee(new Employee(null, "Ben", "male", 30, 5000));
+        employeeController.createEmployee(new Employee(null, "C", "male", 30, 5000));
+        employeeController.createEmployee(new Employee(null, "D", "male", 30, 5000));
         MockHttpServletRequestBuilder request = get("/employees?page=1&size=2")
                 .contentType(MediaType.APPLICATION_JSON);
         mockMvc.perform(request).andExpect(status().isOk())
