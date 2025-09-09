@@ -55,6 +55,12 @@ public class CompanyController {
         return null;
     }
 
+    @DeleteMapping("{id}")
+    public List<Company> deleteCompanyById(@PathVariable int id){
+        companies.removeIf(company -> company.id().equals(id));
+        return companies;
+    }
+
     public void clear(){
         companies.clear();
         id = 0;
