@@ -111,7 +111,7 @@ public class EmployeeControllerTest {
                     "salary": 50000
                     }""";
 
-        MockHttpServletRequestBuilder request = put("/employees/changeSalaryAndAge")
+        MockHttpServletRequestBuilder request = put("/employees/1")
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestBody);
 
@@ -120,4 +120,15 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.salary").value(50000));
     }
 
+    @Test
+    void should_return_error_204_message_when_delete_null_employee() throws Exception {
+        employeeController.createEmployee(new Employee(1,"John Doe","male",30,5000));
+        employeeController.createEmployee(new Employee(2,"Alice","female",30,5000));
+        employeeController.createEmployee(new Employee(3,"Ben","male",30,5000));
+
+        MockHttpServletRequestBuilder request = delete("/employees/5")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request).andExpect(status ().isNoContent());
+    }
 }

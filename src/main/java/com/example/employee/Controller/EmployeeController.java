@@ -46,12 +46,11 @@ public class EmployeeController {
         return employees;
     }
 
-    @PutMapping("/changeSalaryAndAge")
-    public Employee changeEmployeeSalary(@RequestBody Employee employeeRequest) {
+    @PutMapping("{id}")
+    public Employee changeEmployeeSalary(@PathVariable int id ,@RequestBody Employee employeeRequest) {
         String name = employeeRequest.name();
         for (Employee employee : employees) {
-            if (employee.name().equals(name)) {
-                int id = employee.id();
+            if(employee.id().equals(id)){
                 Employee newEmployee = new Employee(id, employeeRequest.name(), employeeRequest.gender(), employeeRequest.age(), employeeRequest.salary());
                 employees.remove(employee);
                 employees.add(newEmployee);
@@ -59,6 +58,12 @@ public class EmployeeController {
             }
         }
         return null;
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEmployee(@PathVariable int id) {
+        employees.removeIf(employee -> employee.id().equals(id));
     }
 
 
