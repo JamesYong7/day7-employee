@@ -131,4 +131,17 @@ public class EmployeeControllerTest {
 
         mockMvc.perform(request).andExpect(status ().isNoContent());
     }
+
+    @Test
+    void should_show_by_page() throws Exception {
+        employeeController.createEmployee(new Employee(1, "John Doe", "male", 30, 5000));
+        employeeController.createEmployee(new Employee(2, "Alice", "female", 30, 5000));
+        employeeController.createEmployee(new Employee(3, "Ben", "male", 30, 5000));
+        employeeController.createEmployee(new Employee(4, "C", "male", 30, 5000));
+        employeeController.createEmployee(new Employee(5, "D", "male", 30, 5000));
+        MockHttpServletRequestBuilder request = get("/employees?page=1&size=2")
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(request).andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
 }

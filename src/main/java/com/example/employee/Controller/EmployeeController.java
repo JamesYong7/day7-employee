@@ -3,6 +3,7 @@ package com.example.employee.Controller;
 import com.example.employee.Entity.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +38,24 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getMaleEmployees(@RequestParam (required = false) String gender) {
-        if (gender != null) {
+    public List<Employee> getMaleEmployees(@RequestParam (required = false, value = "gender") String gender,
+                                           @RequestParam(required = false, value = "page") Integer page, @RequestParam (required = false, value = "size") Integer size) {
+        if(page == null && size == null){
+            page = 0;
+            size = 0;
+        }
+        if (gender != null ) {
             return employees.stream()
-                    .filter(employee -> Objects.equals(employee.gender().toLowerCase(), gender.toLowerCase()))
+                    .filter(employee -> employee.gender().trim().equalsIgnoreCase(gender.trim()))
                     .toList();
+        }
+        if(page != 0 && size != 0){
+            int start = (page - 1) * size;
+            int end = Math.min(start + size, employees.size());
+            if (start >= employees.size() || start < 0) {
+                return new ArrayList<>();
+            }
+            return employees.subList(start, end);
         }
         return employees;
     }
@@ -64,9 +78,10 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteEmployee(@PathVariable int id) {
         employees.removeIf(employee -> employee.id().equals(id));
+//        if (!removed) {
+//            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Employee not found");
+//        }
     }
-
-
 
     public void clear(){
         employees.clear();
