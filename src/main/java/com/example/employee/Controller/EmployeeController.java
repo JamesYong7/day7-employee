@@ -43,4 +43,9 @@ public class EmployeeController {
                 .toList();
 
     }
+
+    public void clear(){
+        employees.clear();
+        id = 0;
+    }
 }
